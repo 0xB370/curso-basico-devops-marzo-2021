@@ -1,0 +1,23 @@
+name: Build and push to docker registry
+
+on: push
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          path: ./5-desafio/frontend/
+          repository: beto2323/craftech-frontend
+          tag_with_ref: true
+          tag_with_sha: true
+          tags: latest, ${{ github.sha }}
