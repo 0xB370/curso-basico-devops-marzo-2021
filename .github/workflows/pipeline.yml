@@ -1,6 +1,14 @@
-name: Build and push to docker registry
+name: Build and Deploy EKS
 
 on: push
+
+env:
+  K8S_NAMESPACE: challenge-prd
+  K8S_NAMESPACE_DEV: challenge-dev
+  AWS_REGION: us-east-2
+  EKS_CLUSTER_NAME: craftech-challenge
+  FRONTEND_REPO: beto2323/craftech-frontend
+  BACKEND_REPO: beto2323/craftech-backend
 
 jobs:
   push_to_registry:
@@ -17,7 +25,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           path: ./5-desafio/frontend/
-          repository: beto2323/craftech-frontend
+          repository: ${{ env.FRONTEND_REPO }}
           tag_with_ref: true
           tag_with_sha: true
           tags: latest, ${{ github.sha }}
@@ -28,7 +36,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           path: ./5-desafio/backend/
-          repository: beto2323/craftech-backend
+          repository: ${{ env.BACKEND_REPO }}
           tag_with_ref: true
           tag_with_sha: true
           tags: latest, ${{ github.sha }}
+      
+      - name: Deploy the Docker image to the kubernetes cluster dev
+        if: ${{ github.ref == 'refs/heads/dev' }}
+        uses: cancue/eks-action@v0.0.2
+        env:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: $AWS_REGION
+          cluster_name: $EKS_CLUSTER_NAME
+        with:
+          args: |
+            kubectl set image deployment frontend -n $K8S_NAMESPACE_DEV frontend=$FRONTEND_REPO:${{ github.sha }}
+            kubectl rollout status deployment/frontend -n $K8S_NAMESPACE_DEV
