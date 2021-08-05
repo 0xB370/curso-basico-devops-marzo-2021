@@ -1,15 +1,15 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: frontend
+  name: backend
   annotations:
     kubernetes.io/ingress.class: "public"
 spec:
   rules:
-    - host: dev.frontend.craftech.io
+    - host: dev.backend.craftech.io
       http:
         paths:
           - path: /
             backend:
-              serviceName: frontend
+              serviceName: backend
               servicePort: 5050

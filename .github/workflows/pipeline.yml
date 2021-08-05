@@ -51,5 +51,7 @@ jobs:
           cluster_name: $EKS_CLUSTER_NAME
         with:
           args: |
+            kubectl set image deployment backend -n $K8S_NAMESPACE_DEV backend=$BACKEND_REPO:${{ github.sha }}
             kubectl set image deployment frontend -n $K8S_NAMESPACE_DEV frontend=$FRONTEND_REPO:${{ github.sha }}
+            kubectl rollout status deployment/backend -n $K8S_NAMESPACE_DEV
             kubectl rollout status deployment/frontend -n $K8S_NAMESPACE_DEV
