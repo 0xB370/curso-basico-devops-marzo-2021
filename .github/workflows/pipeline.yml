@@ -41,7 +41,7 @@ jobs:
           tag_with_sha: true
           tags: latest, ${{ github.sha }}
       
-      - name: Deploy the Docker image to the kubernetes cluster dev
+      - name: Deploy the Docker image to the kubernetes dev cluster
         if: ${{ github.ref == 'refs/heads/dev' }}
         uses: cancue/eks-action@v0.0.2
         env:
@@ -55,3 +55,18 @@ jobs:
             kubectl set image deployment frontend -n $K8S_NAMESPACE_DEV frontend=$FRONTEND_REPO:${{ github.sha }}
             kubectl rollout status deployment/backend -n $K8S_NAMESPACE_DEV
             kubectl rollout status deployment/frontend -n $K8S_NAMESPACE_DEV
+      
+      - name: Deploy the Docker image to the kubernetes prod cluster
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: cancue/eks-action@v0.0.2
+        env:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: $AWS_REGION
+          cluster_name: $EKS_CLUSTER_NAME
+        with:
+          args: |
+            kubectl set image deployment backend -n $K8S_NAMESPACE backend=$BACKEND_REPO:${{ github.sha }}
+            kubectl set image deployment frontend -n $K8S_NAMESPACE frontend=$FRONTEND_REPO:${{ github.sha }}
+            kubectl rollout status deployment/backend -n $K8S_NAMESPACE
+            kubectl rollout status deployment/frontend -n $K8S_NAMESPACE
