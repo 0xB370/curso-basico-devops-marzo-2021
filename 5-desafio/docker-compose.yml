@@ -1,0 +1,41 @@
+version: '3.7'
+
+services: 
+    postgres:
+        image: postgres:12.5-alpine
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
+        networks:
+            - craftech-net
+    
+    backend:
+        build:
+            context: ./backend/
+            dockerfile: Dockerfile
+        depends_on:
+            - postgres
+        ports:
+            - 8000:8000
+        networks:
+            - craftech-net
+    
+    frontend:
+        build:
+            context: ./frontend/
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+        networks:
+            - craftech-net
+
+volumes:
+    pgdata:
+    
+networks:
+    craftech-net:
