@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 from apps.core.utils import get_value_env as env
 import warnings
+import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,6 +32,10 @@ else:
 DEBUG = env("DJANGO_DEBUG", True)
 
 ALLOWED_HOSTS = ['*']
+
+if 'test' in sys.argv or 'test\_coverage' in sys.argv: #Covers regular testing and django-coverage
+ DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+ DATABASES['default']['NAME'] = ':memory:'
 
 
 #############################################
