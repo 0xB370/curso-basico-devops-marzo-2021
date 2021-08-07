@@ -21,7 +21,7 @@ jobs:
       
       - name: Install Backend Dependencies
         run: |
-          apt install -y gcc graphviz-dev
+          sudo apt install -y gcc graphviz-dev
           pip install -r requirements.txt
         working-directory: ./5-desafio/backend/
       - name: Run Backend Unit Tests
