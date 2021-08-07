@@ -47,9 +47,7 @@ jobs:
         run: |
           sudo systemctl start postgresql.service
           sudo systemctl status postgresql
-      - name: Create database
-        run: |
-          psql --username=postgres -f "${GITHUB_WORKSPACE}/db/sql/create_db.sql"
+     
       - name: Run Backend Unit Tests
         env:
           PYTHONUNBUFFERED: 1
@@ -58,7 +56,7 @@ jobs:
           DB_NAME: challenge
           DB_USER: postgres
           PASSWORD: postgres
-          HOST: 127.0.0.1
+          HOST: postgres
           PORT: 5432
         run: |
           python manage.py test request_loan.tests
