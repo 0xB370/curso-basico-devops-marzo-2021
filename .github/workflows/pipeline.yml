@@ -23,6 +23,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y gcc graphviz-dev
+          pip install psycopg2-binary
           pip install -r requirements.txt
         working-directory: ./5-desafio/backend/
       - name: Run Backend Unit Tests
