@@ -25,13 +25,14 @@ jobs:
           python-version: 3.7
       - name: Install Backend Dependencies
         run: |
-          sudo add-apt-repository ppa:deadsnakes/ppa
           sudo apt update
-          sudo apt install -y gcc libpq-dev python3.7 python-dev postgresql postgresql-contrib postgresql-server-dev-all graphviz-dev
+          sudo apt install -y gcc libpq-dev python-dev postgresql postgresql-contrib postgresql-server-dev-all graphviz-dev
           pip install psycopg2-binary
           pip install -r requirements.txt
         working-directory: ./5-desafio/backend/
       - name: Run Backend Unit Tests
+        env: 
+          SECRET_KEY: vqnozrpl8d-3!1ar&g)+lgbilso-1ih(=u%z7r6kjqmy6bq634
         run: |
           python manage.py test
         working-directory: ./5-desafio/backend/
