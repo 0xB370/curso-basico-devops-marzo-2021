@@ -51,12 +51,14 @@ jobs:
           sudo systemctl status postgresql
           sudo ln -s /tmp/.s.PGSQL.5432 /var/run/postgresql/.s.PGSQL.5432}
           sudo systemctl status postgresql
+          sudo systemctl daemon-reload
+          sudo systemctl restart postgresql
      
       - name: Run Backend Unit Tests
         env:
           PYTHONUNBUFFERED: 1
           SECRET_KEY: vqnozrpl8d-3!1ar&g)+lgbilso-1ih(=u%z7r6kjqmy6bq634
-          DB_ENGINE: django.db.backends.postgresql
+          DB_ENGINE: django.db.backends.postgresql_psycopg2
           DB_NAME: challenge
           DB_USER: postgres
           PASSWORD: postgres
