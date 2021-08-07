@@ -54,12 +54,12 @@ jobs:
         env:
           PYTHONUNBUFFERED: 1
           SECRET_KEY: vqnozrpl8d-3!1ar&g)+lgbilso-1ih(=u%z7r6kjqmy6bq634
-          DB_ENGINE: django.db.backends.postgresql_psycopg2
+          DB_ENGINE: django.db.backends.postgresql
           DB_NAME: challenge
           DB_USER: postgres
           PASSWORD: postgres
           HOST: localhost
-          PORT: ${{ job.services.postgres.ports[5432] }}
+          PORT: '5432'
         run: |
           python manage.py test request_loan.tests
         working-directory: ./5-desafio/backend/
