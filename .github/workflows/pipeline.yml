@@ -17,7 +17,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12.5
+        image: postgres
         env:
           POSTGRES_DB: challenge
           POSTGRES_USER: postgres
@@ -53,6 +53,7 @@ jobs:
           sudo systemctl status postgresql
           sudo systemctl daemon-reload
           sudo systemctl restart postgresql
+          sudo -u postgres createuser -s runner
      
       - name: Run Backend Unit Tests
         env:
