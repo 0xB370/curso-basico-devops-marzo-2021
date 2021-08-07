@@ -5,5 +5,5 @@ import DashboardPage from './DashboardPage';
 
 it('renders without crashing', () => {
     const { getByRole } = render(<DashboardPage />);
-    expect(getByRole('heading')).toHaveTextContent('Ddashboard in Dev namespace!')
+    expect(getByRole('heading')).toHaveTextContent('Dashboard in Dev namespace!')
 })
