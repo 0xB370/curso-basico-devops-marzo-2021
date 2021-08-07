@@ -19,6 +19,8 @@ jobs:
       postgres:
         image: postgres:12.5
         env:
+          POSTGRES_DB: challenge
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready
