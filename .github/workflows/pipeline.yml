@@ -19,14 +19,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_DB: challenge
-          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
           - 5432:5432
 
@@ -49,6 +43,10 @@ jobs:
         run: |
           sudo systemctl start postgresql.service
           sudo systemctl status postgresql
+          sudo ln -s /tmp/.s.PGSQL.5432 /var/run/postgresql/.s.PGSQL.5432}
+          sudo systemctl status postgresql
+          sudo systemctl daemon-reload
+          sudo systemctl restart postgresql
       
       - name: Create database
         run: |
@@ -61,9 +59,9 @@ jobs:
           DB_ENGINE: django.db.backends.postgresql_psycopg2
           DB_NAME: challenge
           DB_USER: postgres
-          PASSWORD: postgres
-          HOST: localhost
-          PORT: '5432'
+          DB_PASS: postgres
+          DB_HOST: postgres
+          DB_PORT: ${{ job.services.postgres.ports['5432'] }}
         run: |
           python manage.py test request_loan.tests
         working-directory: ./5-desafio/backend/
