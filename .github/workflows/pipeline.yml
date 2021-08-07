@@ -22,10 +22,11 @@ jobs:
       - name: Run Unit Tests
         uses: actions/setup-node@v1
         with:
-          path: ./5-desafio/frontend/
           node-version: 14.x
       - run: npm ci
+          working-directory: ./5-desafio/frontend/
       - run: npm test
+          working-directory: ./5-desafio/frontend/
 
       - name: Push Frontend to Docker Hub
         uses: docker/build-push-action@v1
