@@ -22,8 +22,8 @@ jobs:
       - name: Install Backend Dependencies
         run: |
           sudo apt update
-          sudo apt install -y libpq-dev python3-dev postgresql-server-dev-all gcc graphviz-dev
-          pip3 install -r requirements.txt
+          sudo apt install -y libpq-dev python-dev postgresql-server-dev-all gcc graphviz-dev
+          pip install -r requirements.txt
         working-directory: ./5-desafio/backend/
       - name: Run Backend Unit Tests
         run: |
