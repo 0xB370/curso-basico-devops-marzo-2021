@@ -21,7 +21,7 @@ jobs:
 
       - uses: 8398a7/action-slack@v2
         with:
-          type: ${{ job.status }}
+          status: ${{ job.status }}
           username: '0xB370'
           icon_emoji: ':octocat:'
           channel: '#devops'
