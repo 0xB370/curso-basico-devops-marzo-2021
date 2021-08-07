@@ -18,6 +18,17 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+
+      - name: Slack notification
+        uses: 8398a7/action-slack@v2
+        with:
+          type: ${{ job.status }}
+          username: 0xB370
+          icon_emoji: ':octocat:'
+          channel: '#devops'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       
       - name: Run Unit Tests
         uses: actions/setup-node@v1
