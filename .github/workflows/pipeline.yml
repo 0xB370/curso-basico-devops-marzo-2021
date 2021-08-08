@@ -71,6 +71,7 @@ jobs:
           tags: latest, ${{ github.sha }}
         
       - name: Push Backend to Docker Hub
+        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
