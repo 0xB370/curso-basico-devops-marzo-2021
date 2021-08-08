@@ -23,7 +23,7 @@ jobs:
         uses: Daniel-Marynicz/postgresql-action@master
         with:
           postgres_image_tag: 12-alpine
-          app_user: ${{ secrets.POSTGRES_USERNAME }}
+          app_user: ${{ secrets.APP_USER }}
           app_user_password: ${{ secrets.POSTGRES_PASSWORD }}
           app_db: ${{ secrets.DB_NAME }}
       
