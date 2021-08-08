@@ -12,15 +12,15 @@ env:
 
 jobs:
 
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+  
   tests:
     name: "Python ${{ matrix.python-version }}"
     runs-on: "ubuntu-latest"
     env:
       USING_COVERAGE: '3.6,3.8'
-
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
 
     steps:
       - name: Check out the repo
