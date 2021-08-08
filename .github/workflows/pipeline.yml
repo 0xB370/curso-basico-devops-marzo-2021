@@ -62,7 +62,7 @@ jobs:
           DB_HOST: localhost
           DB_PORT: ${{ job.services.postgres.ports['5432'] }}
         run: |
-          python manage.py test request_loan.tests
+          python manage.py test
         working-directory: ./5-desafio/backend/
       
       - name: Run Unit Tests
