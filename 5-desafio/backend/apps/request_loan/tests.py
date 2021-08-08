@@ -7,6 +7,6 @@ from django.test import TestCase
 
 class ExampleTestClass(TestCase):
 
-    def test_false_is_true():
+    def test_false_is_true(self):
         print("Method: test_false_is_true.")
-        assert capitalize_string('test') == 'Test'
+        self.assertTrue(False)
