@@ -7,7 +7,7 @@ class DashboardPage extends React.Component {
 
         return (
             <div>
-                <h1>Daashboard in Dev namespace!</h1>
+                <h1>Dashboard in Dev namespace!</h1>
             </div>
         );
     }
