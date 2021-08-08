@@ -1,3 +1,5 @@
+![example workflow](https://github.com/0xB370/curso-basico-devops-marzo-2021/actions/workflows/pipeline.yml/badge.svg)
+
 ![Craftech Academy](_docs/academy_logo.png "Craftech Academy")
 
 # Simple Web Application
