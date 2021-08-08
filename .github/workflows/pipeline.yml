@@ -32,13 +32,13 @@ jobs:
       #   run: |
       #     psql -U postgres -tc "SELECT 'CREATE DATABASE mydb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mydb')"
 
-      - uses: akanieski/setup-postgres-cli@v1
+      - name: Setup Postgres database
+        uses: Daniel-Marynicz/postgresql-action@master
         with:
-          # Password will be passed automatically to the postgres client
-          password: ${{ secrets.PG_PASSWORD }}
-
-          # Use any of the binaries that ship with the postgres client (ie. pg_dump, psql, vacuumdb, reindexdb, etc)
-          command: psql -U postgres -tc "SELECT 'CREATE DATABASE mydb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mydb')"
+          postgres_image_tag: 12-alpine
+          app_user: app
+          app_user_password: postgres
+          app_db: app
       
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
