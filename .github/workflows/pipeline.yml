@@ -112,3 +112,12 @@ jobs:
             kubectl set image deployment frontend -n $K8S_NAMESPACE frontend=$FRONTEND_REPO:${{ github.sha }}
             kubectl rollout status deployment/backend -n $K8S_NAMESPACE
             kubectl rollout status deployment/frontend -n $K8S_NAMESPACE
+      
+      - name: Slack Notification
+        if: always()
+        uses: ravsamhq/notify-slack-action@master
+        with:
+          status: ${{ job.status }}
+          notify_when: 'success,failure'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
