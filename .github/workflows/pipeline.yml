@@ -12,14 +12,55 @@ env:
 
 jobs:
   push_to_registry:
-    name: Push Docker image to Docker Hub
+    name: Test and push Docker image to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      
+      - name: Setup Postgres database
+        uses: Daniel-Marynicz/postgresql-action@master
+        with:
+          postgres_image_tag: 12-alpine
+          app_user: ${{ secrets.APP_USER }}
+          app_user_password: ${{ secrets.POSTGRES_PASSWORD }}
+          app_db: ${{ secrets.DB_NAME }}
+      
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install Backend Dependencies
+        run: |
+          sudo apt install -y gcc graphviz-dev
+          pip install -r requirements.txt
+        working-directory: ./5-desafio/backend/
+      - name: Run Backend Unit Tests
+        env:
+          PYTHONUNBUFFERED: 1
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DB_ENGINE: django.db.backends.postgresql_psycopg2
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.POSTGRES_USERNAME }}
+          DB_PASS: ${{ secrets.POSTGRES_PASSWORD }}
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: |
+          python manage.py test
+        working-directory: ./5-desafio/backend/
+      
+      - name: Run Frontend Unit Tests
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: npm ci
+        working-directory: ./5-desafio/frontend/
+      - run: npm test
+        working-directory: ./5-desafio/frontend/
 
       - name: Push Frontend to Docker Hub
+        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -31,6 +72,7 @@ jobs:
           tags: latest, ${{ github.sha }}
         
       - name: Push Backend to Docker Hub
+        if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
