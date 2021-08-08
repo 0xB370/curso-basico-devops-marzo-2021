@@ -12,12 +12,21 @@ env:
 
 jobs:
   push_to_registry:
-    name: Push Docker image to Docker Hub
+    name: Test and push Docker image to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      
+      - name: Run Frontend Unit Tests
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: npm ci
+        working-directory: ./5-desafio/frontend/
+      - run: npm test
+        working-directory: ./5-desafio/frontend/
 
       - name: Push Frontend to Docker Hub
         if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' }}
