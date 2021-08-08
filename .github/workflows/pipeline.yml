@@ -15,20 +15,17 @@ jobs:
     name: Test and push Docker image to Docker Hub
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:12.7
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      
+      - name: Setup Postgres database
+        uses: Daniel-Marynicz/postgresql-action@master
+        with:
+          postgres_image_tag: 12-alpine
+          app_user: ${{ secrets.POSTGRES_USERNAME }}
+          app_user_password: ${{ secrets.POSTGRES_PASSWORD }}
+          app_db: ${{ secrets.DB_NAME }}
       
       - name: Set up Python 3.7
         uses: actions/setup-python@v2
