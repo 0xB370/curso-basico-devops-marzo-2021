@@ -19,18 +19,26 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       
-      - name: Start PostgreSQL
-        run: |
-          sudo systemctl start postgresql.service
-          sudo systemctl status postgresql
-          sudo ln -s /tmp/.s.PGSQL.5432 /var/run/postgresql/.s.PGSQL.5432}
-          sudo systemctl status postgresql
-          sudo systemctl daemon-reload
-          sudo systemctl restart postgresql
+      # - name: Start PostgreSQL
+      #   run: |
+      #     sudo systemctl start postgresql.service
+      #     sudo systemctl status postgresql
+      #     sudo ln -s /tmp/.s.PGSQL.5432 /var/run/postgresql/.s.PGSQL.5432}
+      #     sudo systemctl status postgresql
+      #     sudo systemctl daemon-reload
+      #     sudo systemctl restart postgresql
       
-      - name: Create database
-        run: |
-          psql -U postgres -tc "SELECT 'CREATE DATABASE mydb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mydb')"
+      # - name: Create database
+      #   run: |
+      #     psql -U postgres -tc "SELECT 'CREATE DATABASE mydb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mydb')"
+
+      - uses: akanieski/setup-postgres-cli@v1
+        with:
+          # Password will be passed automatically to the postgres client
+          password: ${{ secrets.PG_PASSWORD }}
+
+          # Use any of the binaries that ship with the postgres client (ie. pg_dump, psql, vacuumdb, reindexdb, etc)
+          command: psql -U postgres -tc "SELECT 'CREATE DATABASE mydb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mydb')"
       
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
